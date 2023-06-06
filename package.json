@@ -1,0 +1,18 @@
+{
+  "name": "social-network",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "nodemon main.js",
+    "debug": "nodemon --inspect ."
+  },
+  "author": "eslam Sobhii",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-async-error": "^0.0.2",
+    "mongoose": "^7.2.2",
+    "nodemon": "^2.0.22"
+  }
+}
