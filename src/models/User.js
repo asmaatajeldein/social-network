@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -26,6 +28,16 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+});
+
+// hashing password before saving the document to the db
+userSchema.pre("save", async function () {
+  // hashing password only when changed,
+  //  because this pre middlware will be executed when updating also.
+  if (this.isModified("password")) {
+    const hashedPassword = await bcrypt.hash(this.password, 10);
+    this.password = hashedPassword;
+  }
 });
 
 const User = mongoose.model("users", userSchema);
