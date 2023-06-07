@@ -1,12 +1,16 @@
 const User = require("../models/User");
+const AppError = require("../utils/AppError");
 
 const getAllUsers = async (req, res, next) => {
   const users = await User.find();
   res.send(users);
 };
 
-const getUserById = (req, res, next) => {
-  res.send({ message: "the specific user returned!" });
+const getUserById = async (req, res, next) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) return next(new AppError("User Not Found!", 400));
+  res.send(user);
 };
 
 const register = (req, res, next) => {
