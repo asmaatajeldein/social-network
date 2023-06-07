@@ -13,8 +13,14 @@ const getUserById = async (req, res, next) => {
   res.send(user);
 };
 
-const register = (req, res, next) => {
-  res.send({ message: "user created successfully!" });
+const register = async (req, res, next) => {
+  const { username, email, password } = req.body;
+  const createdUser = await User.create({
+    user_name: username,
+    email,
+    password,
+  });
+  res.send({ message: "user created successfully!", user: createdUser });
 };
 
 const updateUser = (req, res, next) => {
