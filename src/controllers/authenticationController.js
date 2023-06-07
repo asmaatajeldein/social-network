@@ -1,5 +1,8 @@
-const getAllUsers = (req, res, next) => {
-  res.send({ message: "All users returned!" });
+const User = require("../models/User");
+
+const getAllUsers = async (req, res, next) => {
+  const users = await User.find();
+  res.send(users);
 };
 
 const getUserById = (req, res, next) => {
