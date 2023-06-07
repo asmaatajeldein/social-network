@@ -40,5 +40,10 @@ userSchema.pre("save", async function () {
   }
 });
 
+// avoid returning the password in the response
+userSchema.post("save", function () {
+  this.password = undefined;
+});
+
 const User = mongoose.model("users", userSchema);
 module.exports = User;
