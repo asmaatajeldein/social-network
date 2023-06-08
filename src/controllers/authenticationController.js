@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const AppError = require("../utils/AppError");
 
+const bcrypt = require("bcrypt");
+
 const getAllUsers = async (req, res, next) => {
   const users = await User.find();
   res.send(users);
@@ -48,8 +50,18 @@ const deleteUser = async (req, res, next) => {
   res.send({ message: "user deleted successfully!", deletedUser });
 };
 
-const login = (req, res, next) => {
-  res.send({ message: "user logged in successfully!" });
+const login = async (req, res, next) => {
+  // checking if the email exists
+  const { email, password } = req.body;
+  const user = await User.findOne({ email: email }).select("+password");
+  if (!user) return next(new AppError("Invalid Credentials!", 400));
+
+  // checking if the password is correct
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return next(new AppError("Invalid Credentials!", 400));
+
+  user.password = undefined;
+  res.send({ message: "user logged in successfully!", user });
 };
 
 module.exports = {
