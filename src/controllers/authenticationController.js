@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id).select("+password");
   if (!user) return next(new AppError("User Not Found", 400));
 
   const update = {};

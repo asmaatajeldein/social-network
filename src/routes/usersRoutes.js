@@ -26,7 +26,7 @@ router.post("/", register);
 router.patch("/:id", updateUser);
 
 // delete user
-router.delete("/:id", deleteUser);
+router.delete("/:id", verifyAdminRole, deleteUser);
 
 // login
 router.post("/login", login);
