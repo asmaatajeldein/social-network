@@ -3,6 +3,7 @@ const router = express.Router();
 
 const verifyToken = require("../utils/verifyToken");
 const verifyAdminRole = require("../utils/verifyAdminRole");
+const canUpdateRole = require("../utils/verifySuper");
 
 const {
   getAllUsers,
@@ -23,7 +24,7 @@ router.get("/:id", getUserById);
 router.post("/", register);
 
 // update user
-router.patch("/:id", updateUser);
+router.patch("/:id", canUpdateRole, updateUser);
 
 // delete user
 router.delete("/:id", verifyAdminRole, deleteUser);
