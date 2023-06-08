@@ -23,8 +23,19 @@ const register = async (req, res, next) => {
   res.send({ message: "user created successfully!", user: createdUser });
 };
 
-const updateUser = (req, res, next) => {
-  res.send({ message: "user updated successfully!" });
+const updateUser = async (req, res, next) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) return next(new AppError("User Not Found", 400));
+
+  const update = {};
+  update.user_name = req.body.user_name ? req.body.user_name : user.user_name;
+  update.email = req.body.email ? req.body.email : user.email;
+  update.password = req.body.password ? req.body.password : user.password;
+  update.role = req.body.role ? req.body.role : user.role;
+
+  const editedUser = await User.findByIdAndUpdate(id, update, { new: true });
+  res.send({ message: "user updated successfully!", editedUser });
 };
 
 const deleteUser = (req, res, next) => {
