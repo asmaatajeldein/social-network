@@ -38,8 +38,14 @@ const updateUser = async (req, res, next) => {
   res.send({ message: "user updated successfully!", editedUser });
 };
 
-const deleteUser = (req, res, next) => {
-  res.send({ message: "user deleted successfully!" });
+const deleteUser = async (req, res, next) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) return next(new AppError("User Not Found!", 400));
+
+  const deletedUser = await User.findByIdAndDelete(id);
+
+  res.send({ message: "user deleted successfully!", deletedUser });
 };
 
 const login = (req, res, next) => {
