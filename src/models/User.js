@@ -45,5 +45,14 @@ userSchema.post("save", function () {
   this.password = undefined;
 });
 
+/*
+  instance methods
+*/
+// comparing the stored password with the entered one
+userSchema.methods.comparePassword = async function (password) {
+  const isMatch = await bcrypt.compare(password, this.password);
+  return isMatch;
+};
+
 const User = mongoose.model("users", userSchema);
 module.exports = User;

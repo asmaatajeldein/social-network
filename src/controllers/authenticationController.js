@@ -57,7 +57,7 @@ const login = async (req, res, next) => {
   if (!user) return next(new AppError("Invalid Credentials!", 400));
 
   // checking if the password is correct
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await user.comparePassword(password);
   if (!isMatch) return next(new AppError("Invalid Credentials!", 400));
 
   user.password = undefined;
