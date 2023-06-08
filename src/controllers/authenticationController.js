@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const AppError = require("../utils/AppError");
 
-const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const getAllUsers = async (req, res, next) => {
   const users = await User.find();
@@ -60,8 +60,11 @@ const login = async (req, res, next) => {
   const isMatch = await user.comparePassword(password);
   if (!isMatch) return next(new AppError("Invalid Credentials!", 400));
 
+  // creating a token
+  const token = jwt.sign({ id: user._id, role: user.role }, "mysecret");
+
   user.password = undefined;
-  res.send({ message: "user logged in successfully!", user });
+  res.send({ message: "user logged in successfully!", user, token });
 };
 
 module.exports = {
