@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const verifyToken = require("../utils/verifyToken");
+
 const {
   getAllUsers,
   getUserById,
@@ -11,7 +13,7 @@ const {
 } = require("../controllers/authenticationController");
 
 // getting all users
-router.get("/", getAllUsers);
+router.get("/", verifyToken, getAllUsers);
 
 // getting user by id
 router.get("/:id", getUserById);
