@@ -6,6 +6,9 @@ const usersRouter = require("./src/routes/usersRoutes");
 
 const errorHandler = require("express-async-error").Handler;
 
+//Routes
+const postRoutes = require('./src/routes/postRoutes');
+
 // imports
 require("./db");
 
@@ -22,6 +25,9 @@ app.use("/users", usersRouter);
 app.use((req, res, next) => {
   res.send("<h1 style='text-align:center'>Hello World</h1>");
 });
+
+//Routes Handeling
+app.use('/posts',postRoutes)
 
 // Global error handler
 app.use((err, req, res, next) => {
