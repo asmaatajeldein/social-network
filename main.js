@@ -11,6 +11,8 @@ const postRoutes = require('./src/routes/postRoutes');
 
 // imports
 require("./db");
+const commentRoutes = require("./src/routes/commentRoutes");
+const commentValidation = require("./src/utils/commentValidation");
 
 // parsing incoming requests
 app.use(express.json());
@@ -19,15 +21,15 @@ app.use(express.urlencoded({ extended: false }));
 // error handler over any async function
 app.use(errorHandler());
 
-// routing
+// Routes
 app.use("/users", usersRouter);
+app.use("/posts",postRoutes);
+app.use("/comments", commentValidation, commentRoutes);
 
 app.use((req, res, next) => {
   res.send("<h1 style='text-align:center'>Hello World</h1>");
 });
 
-//Routes Handeling
-app.use('/posts',postRoutes)
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -35,7 +37,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send({
     status: statusCode,
     message: err?.message || "Internal Server Error!",
-    errors: err?.errors || [],
+    errors: err?.errors || []
   });
 });
 
