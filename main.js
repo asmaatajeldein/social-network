@@ -1,6 +1,9 @@
 const express = require("express");
 
 const app = express();
+
+const usersRouter = require("./src/routes/usersRoutes");
+
 const errorHandler = require("express-async-error").Handler;
 
 // imports
@@ -12,6 +15,9 @@ app.use(express.urlencoded({ extended: false }));
 
 // error handler over any async function
 app.use(errorHandler());
+
+// routing
+app.use("/users", usersRouter);
 
 app.use((req, res, next) => {
   res.send("<h1 style='text-align:center'>Hello World</h1>");
