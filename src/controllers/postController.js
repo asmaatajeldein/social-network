@@ -1,5 +1,6 @@
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const uploadToCloud = require("../utils/uploadToCloud")
 
 const getUserPosts = async (req, res) => {
 	// get all posts from database
@@ -35,6 +36,9 @@ const getPostById = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
+    if(req?.file){
+        req.body.img_url = uploadToCloud("public/data/posts_images/"+req.file);
+    }
 	const new_post = new Post({
 		author: req.user._id,
 		title: req.body.title,
