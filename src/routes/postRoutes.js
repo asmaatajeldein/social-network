@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const multer  = require('multer');
+const upload = multer({ dest: 'public/data/posts_images/' });
 const {
 	getUserPosts,
 	getPostById,
@@ -21,7 +23,7 @@ router.get("/", verifyToken, getUserPosts);
 router.get("/:id", canViewPost, getPostById);
 
 // POST requests
-router.post("/", verifyToken, createPost);
+router.post("/", verifyToken, upload.single('post_img'), createPost);
 
 // UPDATE & PATCH requests
 router.put("/:id", canEditPost, editPostById);
