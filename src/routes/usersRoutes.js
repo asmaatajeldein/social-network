@@ -6,6 +6,9 @@ const verifyAdminRole = require("../utils/verifyAdminRole"); // admins & super a
 const canUpdateRole = require("../utils/verifySuper"); // only super admins
 const canUpdateProfile = require("../utils/canUpdateProfile"); // only you or a super-admin can update your profile info
 
+// validation middlewares
+const { registerValidation } = require("../utils/userValidation");
+
 const {
   getAllUsers,
   getUserById,
@@ -22,7 +25,7 @@ router.get("/", verifyToken, verifyAdminRole, getAllUsers);
 router.get("/:id", verifyToken, getUserById);
 
 // create a new user (register)
-router.post("/", register);
+router.post("/", registerValidation, register);
 
 // update user
 router.patch("/:id", verifyToken, canUpdateProfile, canUpdateRole, updateUser);
