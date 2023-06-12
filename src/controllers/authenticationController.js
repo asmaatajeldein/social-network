@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Post = require("../models/Post");
 const AppError = require("../utils/AppError");
 
 const jwt = require("jsonwebtoken");
@@ -10,9 +11,15 @@ const getAllUsers = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
   const { id } = req.params;
+
+  // getting the user
   const user = await User.findById(id);
   if (!user) return next(new AppError("User Not Found!", 400));
-  res.send(user);
+
+  // getting his posts
+  const posts = await Post.find({ author: id });
+
+  res.send({ user, posts });
 };
 
 const register = async (req, res, next) => {
