@@ -1,7 +1,18 @@
 const express = require("express");
 const router = express.Router();
+
 const multer  = require('multer');
-const upload = multer({ dest: 'public/data/posts_images/' });
+const path = require('path');
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+	  cb(null, 'public/data/posts_images/')
+	},
+	filename: function (req, file, cb) {
+	  cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+	}
+})
+const upload = multer({ storage: "public/data/posts_images/" });
+
 const {
 	getUserPosts,
 	getPostById,
@@ -35,6 +46,6 @@ router.patch("/:id", canEditPost, editPostById);
 router.delete("/:id", canEditPost, deletePostById);
 
 // delete posts by userId
-router.delete("/", verifyToken, deletePosts);
+router.delete("/", canEditPost, deletePosts);
 
 module.exports = router;
