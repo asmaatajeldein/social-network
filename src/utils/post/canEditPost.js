@@ -1,4 +1,4 @@
-const AppError = require("./AppError");
+const AppError = require("../AppError");
 const jwt = require("jsonwebtoken");
 const Post = require("../../models/Post");
 
@@ -18,7 +18,7 @@ const canEditPost = (req, res, next) => {
     if (user_id === post.author) {
       next();
     } else {
-      if (user_role === "super-admin") {
+      if (user_role === "super-admin" ||user_role === "admin") {
         next();
       } else {
         return next(new AppError("You are not authorized!", 400));
