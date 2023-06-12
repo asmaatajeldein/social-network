@@ -14,6 +14,14 @@ const loginSchema = Joi.object({
   password: Joi.string().required().min(8),
 });
 
+// update
+const updateSchema = Joi.object({
+  username: Joi.string().min(3),
+  email: Joi.string().email(),
+  password: Joi.string().min(8),
+  role: Joi.string().valid("user", "admin", "super-admin"),
+}).min(1);
+
 const registerValidation = (req, res, next) => {
   const { error } = registerSchema.validate(req.body);
   if (error)
@@ -29,4 +37,10 @@ const loginValidation = (req, res, next) => {
   next();
 };
 
-module.exports = { registerValidation, loginValidation };
+const updateValidation = (req, res, next) => {
+  const { error } = updateSchema.validate(req.body);
+  if (error) return next(new AppError("The data enetered is not valid!", 401));
+  next();
+};
+
+module.exports = { registerValidation, loginValidation, updateValidation };

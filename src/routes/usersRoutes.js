@@ -7,7 +7,10 @@ const canUpdateRole = require("../utils/verifySuper"); // only super admins
 const canUpdateProfile = require("../utils/canUpdateProfile"); // only you or a super-admin can update your profile info
 
 // validation middlewares
-const { registerValidation } = require("../utils/userValidation");
+const {
+  registerValidation,
+  updateValidation,
+} = require("../utils/userValidation");
 
 const {
   getAllUsers,
@@ -28,7 +31,14 @@ router.get("/:id", verifyToken, getUserById);
 router.post("/", registerValidation, register);
 
 // update user
-router.patch("/:id", verifyToken, canUpdateProfile, canUpdateRole, updateUser);
+router.patch(
+  "/:id",
+  updateValidation,
+  verifyToken,
+  canUpdateProfile,
+  canUpdateRole,
+  updateUser
+);
 
 // delete user
 router.delete("/:id", verifyToken, verifyAdminRole, deleteUser);
