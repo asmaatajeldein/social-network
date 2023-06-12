@@ -1,20 +1,25 @@
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
-const uploadToCloud = require("../utils/uploadToCloud")
+const uploadToCloud = require("../utils/uploadToCloud");
 
 const getUserPosts = async (req, res) => {
 	// get all posts from database
 	const { author } = req.user;
-    if(!author) {next(new AppError("Invalid User",400));}
+	if (!author) {
+		next(new AppError("Invalid User", 400));
+	}
 
 	const posts = await Post.find({ author: author._id });
 
-    posts.forEach(async (element, index) => {
-        const comments = await Comment.find({post: posts[index]._id});
-        posts[index].comments = comments;
-        /***  should add comments  & reviews before sending the response ***/
-	    /***  make it as middleware since we going to use it in all get req. ***/
-    });
+	posts.forEach(async (element, index) => {
+		const comments = await Comment.find({ post: posts[index]._id });
+		posts[index].comments = comments;
+
+		const reviews = await Review.find({ post: posts[index]._id });
+		posts[index].reviews = reviews;
+		/***  should add comments  & reviews before sending the response ***/
+		/***  make it as middleware since we going to use it in all get req. ***/
+	});
 
 	res.send(posts);
 };
@@ -31,19 +36,27 @@ const getPostById = async (req, res) => {
 		next(new AppError("Post not found", 404));
 	}
 	// add comments and reviews middleware
+	const comments = await Comment.find({ postId: post._id });
+	post.comments = comments;
+
+	const reviews = await Review.find({ postId: post._id });
+	post.reviews = reviews;
 
 	res.send(post);
 };
 
 const createPost = async (req, res) => {
-    if(req?.file){
-        req.body.img_url = uploadToCloud("public/data/posts_images/"+req.file);
-    }
+	// console.log(req);
+	if (req.file) {
+		req.body.img_url = await uploadToCloud(req.file.path, {
+			public_id: req.file.originalname,
+		});
+	}
 	const new_post = new Post({
 		author: req.user._id,
 		title: req.body.title,
 		content: req.body.content,
-		img_url: req.body.img_url,
+		img_url: req.body.img_url.secure_url,
 		date: new Date(),
 		status: req.body.status,
 	});
@@ -63,15 +76,21 @@ const editPostById = async (req, res) => {
 const deletePostById = async (req, res) => {
 	const { id } = req.params;
 	await Post.findByIdAndDelete(id);
-	
+	await Comment.deleteMany({postId: id});
+	await Review.deleteMany({postId: id});
 	res.send("Post Deleted Successfully!");
 };
 
 const deletePosts = async (req, res) => {
-	const { user } = req.user;
-	await Post.find(id);
+	const { author } = req.body.author;
+	const posts = await Post.find({author});
+	posts.forEach(async (post) => {
+		await Comment.deleteMany({postId: post._id});
+		await Review.deleteMany({postId: post._id});
+	});
+	await Post.deleteMany({author: author});
 	//////////////////////////////// NEED ATTENTION ///////////////////////////
-	res.send("Post Deleted Successfully!");
+	res.send("Posts Deleted Successfully!");
 };
 
 module.exports = {
@@ -80,5 +99,5 @@ module.exports = {
 	createPost,
 	editPostById,
 	deletePostById,
-    deletePosts
+	deletePosts,
 };
