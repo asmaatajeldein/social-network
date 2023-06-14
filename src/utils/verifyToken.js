@@ -11,7 +11,7 @@ const verifyToken = async (req, res, next) => {
     );
 
   // destructuring id from the payload
-  const { id } = jwt.verify(token, "mysecret");
+  const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
   // logged in user
   const user = await User.findById(id);
