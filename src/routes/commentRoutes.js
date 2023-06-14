@@ -5,6 +5,7 @@ const commentValidation = require("../utils/validations/commentValidation");
 
 const verifyToken = require("../utils/verifyToken");
 const canUpdateComment = require("../utils/comment/canUpdateComment");
+const canDeleteComment = require("../utils/comment/canDeleteComment");
 
 const {
   createComment,
@@ -23,6 +24,6 @@ router.get("/", verifyToken, getComments);
 router.put("/:id", commentValidation, canUpdateComment, updateComment);
 
 // delete a comment from a post (must provide comment id in params)
-router.delete("/:id", commentValidation, deleteComment);
+router.delete("/:id", canDeleteComment, deleteComment);
 
 module.exports = router;
