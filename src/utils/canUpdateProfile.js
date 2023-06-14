@@ -11,7 +11,7 @@ const canUpdateProfile = (req, res, next) => {
   if (!token) return next(new AppError("Please, provide a token!!", 400));
 
   // the id and role of the logged in user
-  const { id, role } = jwt.verify(token, "mysecret");
+  const { id, role } = jwt.verify(token, process.env.JWT_SECRET);
 
   // the id of the user that is being updated
   const toBeUpdatedUserId = req.params.id;

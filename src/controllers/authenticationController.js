@@ -1,7 +1,27 @@
 const User = require("../models/User");
+const Post = require("../models/Post");
 const AppError = require("../utils/AppError");
 
 const jwt = require("jsonwebtoken");
+
+const cloudinary = require("../utils/uploadPhotos/cloudinary");
+
+const updateProfilePic = async (req, res, next) => {
+  if (req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "social-network",
+    });
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { profile_pic: result.secure_url },
+      { new: true }
+    );
+    if (!updatedUser) return next(new AppError("Something went wrong!", 401));
+    res.send({ message: "Profile picture updated successfully!", updatedUser });
+  } else {
+    return next(new AppError("No profile pic provided!", 401));
+  }
+};
 
 const getAllUsers = async (req, res, next) => {
   const users = await User.find();
@@ -10,9 +30,15 @@ const getAllUsers = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
   const { id } = req.params;
+
+  // getting the user
   const user = await User.findById(id);
   if (!user) return next(new AppError("User Not Found!", 400));
-  res.send(user);
+
+  // getting his posts
+  const posts = await Post.find({ author: id });
+
+  res.send({ user, posts });
 };
 
 const register = async (req, res, next) => {
@@ -74,4 +100,5 @@ module.exports = {
   updateUser,
   deleteUser,
   login,
+  updateProfilePic,
 };

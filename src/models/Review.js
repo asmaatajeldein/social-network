@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const commentSchema = new Schema({
-  comment: {
-    type: String,
+const reviewSchema = new Schema({
+  review: {
+    type: Number,
     required: true
   },
   userId: {
@@ -22,6 +22,6 @@ const commentSchema = new Schema({
   }
 });
 
-const Comment = mongoose.model("Comment", commentSchema);
+const Review = mongoose.model("Review", reviewSchema);
 
-module.exports = Comment;
+module.exports = Review;

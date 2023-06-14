@@ -5,7 +5,7 @@ const verifyAdminRole = (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) return next(new AppError("Please provide a token!", 400)); //this check is not necessary
 
-  const { role } = jwt.verify(token, "mysecret");
+  const { role } = jwt.verify(token, process.env.JWT_SECRET);
 
   if (role !== "admin" && role !== "super-admin")
     return next(

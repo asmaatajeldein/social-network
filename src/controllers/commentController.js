@@ -1,31 +1,38 @@
 const Comment = require("../models/Comment");
+const Post = require("../models/Post");
+const User = require("../models/User");
 const AppError = require("../utils/AppError");
 
 const getComments = async (req, res) => {
-  const { post } = req.body;
+  const { postId } = req.body;
 
-  if (!post) return next(new AppError("Must provide post._id in request"), 404);
-  const comments = await Comment.find({ post: post._id }).populate({
-    path: "user",
-    select: "username"
+  if (!postId) return next(new AppError("Must provide postId in request"), 404);
+  const comments = await Comment.find({ postId: postId }).populate({
+    path: "userId",
+    select: "user_name"
   });
 
   res.send(comments);
 };
 
 const createComment = async (req, res, next) => {
-  const { body, post, user } = req.body;
+  const { comment, postId, userId } = req.body;
 
-  if (!post || !user)
-    return next(
-      new AppError("Must provide user._id and post._id in request"),
-      404
-    );
+  if (!postId || !userId)
+    return next(new AppError("Must provide userId and postId in request"), 404);
+
+  const userExist = await User.findById(userId);
+  if (!userExist)
+    return next(new AppError("Please provide a valid userId"), 404);
+
+  const postExist = await Post.findById(postId);
+  if (!postExist)
+    return next(new AppError("Please provide a valid postId"), 404);
 
   const createdComment = await Comment.create({
-    body: body,
-    user: user._id,
-    post: post._id
+    comment: comment,
+    userId: userId,
+    postId: postId
   });
 
   res.send(createdComment);
@@ -33,22 +40,22 @@ const createComment = async (req, res, next) => {
 
 const updateComment = async (req, res, next) => {
   const { id } = req.params;
-  const { body } = req.body;
+  const { comment } = req.body;
 
-  const updatedComment = await Comment.updateOne(
-    { id: id },
-    { $set: { body: body } }
+  const updatedComment = await Comment.findOneAndUpdate(
+    { _id: id },
+    { comment: comment }
   );
 
   if (!updatedComment)
-    return next(new AppError("Error in deleting comment", 404));
+    return next(new AppError("Error in updating comment", 404));
 
   res.send(updatedComment);
 };
 
 const deleteComment = async (req, res, next) => {
   const { id } = req.params;
-  const deletedComment = await Comment.deleteOne({ id: id });
+  const deletedComment = await Comment.findByIdAndRemove(id);
 
   if (!deletedComment)
     return next(new AppError("Error in deleting comment", 404));
