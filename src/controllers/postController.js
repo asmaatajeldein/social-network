@@ -13,16 +13,6 @@ const getUserPosts = async (req, res, next) => {
 
   const posts = await Post.find({ author: author._id });
 
-  posts.forEach(async (element, index) => {
-    const comments = await Comment.find({ postId: posts[index]._id });
-    posts[index].comments = comments;
-
-    const reviews = await Review.find({ postId: posts[index]._id });
-    posts[index].reviews = reviews;
-    /***  should add comments  & reviews before sending the response ***/
-    /***  make it as middleware since we going to use it in all get req. ***/
-  });
-
   res.send(posts);
 };
 
@@ -39,20 +29,17 @@ const getPostById = async (req, res, next) => {
   }
   // add comments and reviews middleware
   const comments = await Comment.find({ postId: post._id });
-  post.comments = comments;
 
   const reviews = await Review.find({ postId: post._id });
-  post.reviews = reviews;
 
-  res.send(post);
-  //   res.send({ post, comments, reviews });
+  res.send({ post, comments, reviews });
 };
 
 const createPost = async (req, res, next) => {
   // console.log(req);
   if (req.file) {
     req.body.img_url = await uploadToCloud(req.file.path, {
-      public_id: req.file.originalname,
+      public_id: req.file.originalname
     });
   }
   const new_post = new Post({
@@ -61,7 +48,7 @@ const createPost = async (req, res, next) => {
     content: req.body.content,
     img_url: req.body.img_url?.secure_url,
     date: new Date(),
-    status: req.body.status,
+    status: req.body.status
   });
   await new_post.save();
   // console.log("data", req.body);
@@ -92,7 +79,7 @@ const deletePosts = async (req, res) => {
     await Review.deleteMany({ postId: post._id });
   });
   await Post.deleteMany({ author: author });
-  //////////////////////////////// NEED ATTENTION ///////////////////////////
+
   res.send("Posts Deleted Successfully!");
 };
 
@@ -102,5 +89,5 @@ module.exports = {
   createPost,
   editPostById,
   deletePostById,
-  deletePosts,
+  deletePosts
 };
