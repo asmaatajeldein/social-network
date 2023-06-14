@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const AppError = require("./AppError");
+const AppError = require("../AppError");
 
 const commentValidationSchema = Joi.object({
   comment: Joi.string().required()
