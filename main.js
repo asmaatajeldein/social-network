@@ -2,6 +2,9 @@ const express = require("express");
 
 const app = express();
 
+// Environment variables
+require("dotenv").config();
+
 const usersRouter = require("./src/routes/usersRoutes");
 
 const errorHandler = require("express-async-error").Handler;
@@ -10,7 +13,6 @@ const errorHandler = require("express-async-error").Handler;
 const postRoutes = require("./src/routes/postRoutes");
 
 // imports
-require("dotenv").config();
 require("./db");
 const commentRoutes = require("./src/routes/commentRoutes");
 const commentValidation = require("./src/utils/commentValidation");

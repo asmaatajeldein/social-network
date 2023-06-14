@@ -4,18 +4,7 @@ const AppError = require("../utils/AppError");
 
 const jwt = require("jsonwebtoken");
 
-const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
-
-// handle uplaoding profile pictures
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
-
-const storage = multer.diskStorage({});
-const upload = multer({ storage: storage });
+const cloudinary = require("../utils/uploadPhotos/cloudinary");
 
 const updateProfilePic = async (req, res, next) => {
   if (req.file) {

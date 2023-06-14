@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const multer = require("multer");
-const storage = multer.diskStorage({});
-const upload = multer({ storage: storage });
+const upload = require("../utils/uploadPhotos/multer");
 
 const verifyToken = require("../utils/verifyToken"); // logged in users, admins, or super admins
 const verifyAdminRole = require("../utils/verifyAdminRole"); // admins & super admins
