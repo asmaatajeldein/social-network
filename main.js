@@ -2,15 +2,17 @@ const express = require("express");
 
 const app = express();
 
-const usersRouter = require("./src/routes/usersRoutes");
+// Environment variables
+require("dotenv").config();
 
 const errorHandler = require("express-async-error").Handler;
 
-//Routes
-const postRoutes = require("./src/routes/postRoutes");
-
 // imports
 require("./db");
+
+//Routes
+const postRoutes = require("./src/routes/postRoutes");
+const usersRouter = require("./src/routes/usersRoutes");
 const commentRoutes = require("./src/routes/commentRoutes");
 const reviewRoutes = require("./src/routes/reviewRoutes");
 
@@ -37,8 +39,8 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send({
     status: statusCode,
     message: err?.message || "Internal Server Error!",
-    errors: err?.errors || []
+    errors: err?.errors || [],
   });
 });
 
-app.listen(8000);
+app.listen(process.env.PORT);
