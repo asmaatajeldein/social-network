@@ -4,6 +4,34 @@ const AppError = require("../utils/AppError");
 
 const jwt = require("jsonwebtoken");
 
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+
+// handle uplaoding profile pictures
+cloudinary.config({
+  cloud_name: "difd7ixjm",
+  api_key: "573735441114771",
+  api_secret: "T53MCRpC9JdjItn861rjymLQxsA",
+});
+
+const storage = multer.diskStorage({});
+const upload = multer({ storage: storage });
+
+const updateProfilePic = async (req, res, next) => {
+  if (req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path);
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { profile_pic: result.secure_url },
+      { new: true }
+    );
+    if (!updatedUser) return next(new AppError("Something went wrong!", 401));
+    res.send({ message: "Profile picture updated successfully!", updatedUser });
+  } else {
+    return next(new AppError("No profile pic provided!", 401));
+  }
+};
+
 const getAllUsers = async (req, res, next) => {
   const users = await User.find();
   res.send(users);
@@ -81,4 +109,5 @@ module.exports = {
   updateUser,
   deleteUser,
   login,
+  updateProfilePic,
 };
