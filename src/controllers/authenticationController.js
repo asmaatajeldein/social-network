@@ -8,7 +8,9 @@ const cloudinary = require("../utils/uploadPhotos/cloudinary");
 
 const updateProfilePic = async (req, res, next) => {
   if (req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path);
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "social-network",
+    });
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { profile_pic: result.secure_url },
