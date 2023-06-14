@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const AppError = require("./AppError");
+const AppError = require("../AppError");
 
 const reviewValidationSchema = Joi.object({
   review: Joi.number().min(1).max(5).required()

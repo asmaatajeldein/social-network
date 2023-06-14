@@ -16,26 +16,31 @@ const getReviews = async (req, res) => {
 };
 
 const createReview = async (req, res, next) => {
-  const { review, postId, userId } = req.body;
+  const { review, postId } = req.body;
 
-  if (!review || !userId)
-    return next(new AppError("Must provide userId and postId in request"), 404);
-
-  const userExist = await User.findById(userId);
-  if (!userExist)
-    return next(new AppError("Please provide a valid userId"), 404);
+  if (!postId) return next(new AppError("Must provide postId in request"), 404);
 
   const postExist = await Post.findById(postId);
   if (!postExist)
     return next(new AppError("Please provide a valid postId"), 404);
 
-  const createdReview = await Review.create({
-    review: review,
-    userId: userId,
-    postId: postId
-  });
+  if (req.review) {
+    const updateReview = await Review.findOneAndUpdate(
+      { _id: req.review._id },
+      { review: review },
+      { new: true }
+    );
 
-  res.send(createdReview);
+    res.send({ message: "Review Updated!", updateReview });
+  } else {
+    const createdReview = await Review.create({
+      review: review,
+      userId: req.user._id,
+      postId: postId
+    });
+
+    res.send(createdReview);
+  }
 };
 
 const updateReview = async (req, res, next) => {
@@ -50,7 +55,7 @@ const updateReview = async (req, res, next) => {
   if (!updatedReview)
     return next(new AppError("Error in updating review", 404));
 
-  res.send(updatedReview);
+  res.send({ message: "Review updated successfully!", updatedReview });
 };
 
 const deleteReview = async (req, res, next) => {
@@ -60,7 +65,7 @@ const deleteReview = async (req, res, next) => {
   if (!deletedReview)
     return next(new AppError("Error in deleting review", 404));
 
-  res.send(deletedReview);
+  res.send({ message: "Review deleted successfully!", deletedReview });
 };
 
 module.exports = { getReviews, createReview, updateReview, deleteReview };

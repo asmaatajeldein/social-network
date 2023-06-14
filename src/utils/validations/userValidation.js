@@ -1,17 +1,17 @@
 const Joi = require("joi");
-const AppError = require("./AppError");
+const AppError = require("../AppError");
 
 // registration
 const registerSchema = Joi.object({
   username: Joi.string().required().min(3),
   email: Joi.string().email().required(),
-  password: Joi.string().required().min(8),
+  password: Joi.string().required().min(8)
 });
 
 // login
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().required().min(8),
+  password: Joi.string().required().min(8)
 });
 
 // update
@@ -19,7 +19,7 @@ const updateSchema = Joi.object({
   username: Joi.string().min(3),
   email: Joi.string().email(),
   password: Joi.string().min(8),
-  role: Joi.string().valid("user", "admin", "super-admin"),
+  role: Joi.string().valid("user", "admin", "super-admin")
 }).min(1);
 
 const registerValidation = (req, res, next) => {
