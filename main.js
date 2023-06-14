@@ -7,12 +7,12 @@ const usersRouter = require("./src/routes/usersRoutes");
 const errorHandler = require("express-async-error").Handler;
 
 //Routes
-const postRoutes = require('./src/routes/postRoutes');
+const postRoutes = require("./src/routes/postRoutes");
 
 // imports
 require("./db");
 const commentRoutes = require("./src/routes/commentRoutes");
-const commentValidation = require("./src/utils/commentValidation");
+const reviewRoutes = require("./src/routes/reviewRoutes");
 
 // parsing incoming requests
 app.use(express.json());
@@ -23,13 +23,13 @@ app.use(errorHandler());
 
 // Routes
 app.use("/users", usersRouter);
-app.use("/posts",postRoutes);
-app.use("/comments", commentValidation, commentRoutes);
+app.use("/posts", postRoutes);
+app.use("/comments", commentRoutes);
+app.use("/reviews", reviewRoutes);
 
 app.use((req, res, next) => {
   res.send("<h1 style='text-align:center'>Hello World</h1>");
 });
-
 
 // Global error handler
 app.use((err, req, res, next) => {

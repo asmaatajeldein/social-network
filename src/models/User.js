@@ -7,27 +7,27 @@ const userSchema = new Schema({
   user_name: {
     type: String,
     required: true,
-    minLength: 3,
+    minLength: 3
   },
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   password: {
     type: String,
     required: true,
-    select: false,
+    select: false
   },
   role: {
     type: String,
     enum: ["user", "admin", "super-admin"],
-    default: "user",
+    default: "user"
   },
   created_at: {
     type: Date,
-    default: Date.now(),
-  },
+    default: Date.now()
+  }
 });
 
 // hashing password before saving the document to the db
@@ -54,5 +54,5 @@ userSchema.methods.comparePassword = async function (password) {
   return isMatch;
 };
 
-const User = mongoose.model("users", userSchema);
+const User = mongoose.model("User", userSchema);
 module.exports = User;
