@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const commentValidation = require("../utils/commentValidation");
+const commentValidation = require("../utils/validations/commentValidation");
 
 const {
   createComment,

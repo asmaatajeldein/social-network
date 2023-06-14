@@ -11,8 +11,8 @@ const canUpdateProfile = require("../utils/canUpdateProfile"); // only you or a 
 // validation middlewares
 const {
   registerValidation,
-  updateValidation,
-} = require("../utils/userValidation");
+  updateValidation
+} = require("../utils/validations/userValidation");
 
 const {
   getAllUsers,
@@ -21,7 +21,7 @@ const {
   updateUser,
   deleteUser,
   login,
-  updateProfilePic,
+  updateProfilePic
 } = require("../controllers/authenticationController");
 
 // upload profile pic
