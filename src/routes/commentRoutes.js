@@ -3,6 +3,9 @@ const router = express.Router();
 
 const commentValidation = require("../utils/validations/commentValidation");
 
+const verifyToken = require("../utils/verifyToken");
+const canUpdateComment = require("../utils/comment/canUpdateComment");
+
 const {
   createComment,
   getComments,
@@ -11,13 +14,13 @@ const {
 } = require("../controllers/commentController");
 
 // create comment for a post (req must include user._id & post._id)
-router.post("/", commentValidation, createComment);
+router.post("/", commentValidation, verifyToken, createComment);
 
 // get comments for a post (req must include post._id)
-router.get("/", getComments);
+router.get("/", verifyToken, getComments);
 
 // update a comment in a post (must provide comment body in req & comment id in params)
-router.put("/:id", commentValidation, updateComment);
+router.put("/:id", commentValidation, canUpdateComment, updateComment);
 
 // delete a comment from a post (must provide comment id in params)
 router.delete("/:id", commentValidation, deleteComment);

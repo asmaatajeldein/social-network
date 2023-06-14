@@ -16,10 +16,9 @@ const getComments = async (req, res) => {
 };
 
 const createComment = async (req, res, next) => {
-  const { comment, postId, userId } = req.body;
+  const { comment, postId } = req.body;
 
-  if (!postId || !userId)
-    return next(new AppError("Must provide userId and postId in request"), 404);
+  if (!postId) return next(new AppError("Must provide postId in request"), 404);
 
   const userExist = await User.findById(userId);
   if (!userExist)
@@ -31,7 +30,7 @@ const createComment = async (req, res, next) => {
 
   const createdComment = await Comment.create({
     comment: comment,
-    userId: userId,
+    userId: req.user._id,
     postId: postId
   });
 
