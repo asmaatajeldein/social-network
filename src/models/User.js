@@ -26,7 +26,8 @@ const userSchema = new Schema({
   },
   profile_pic: {
     type: String,
-    default: "",
+    default:
+      "https://res.cloudinary.com/difd7ixjm/image/upload/v1686762367/social-network/csfa6qk6apphgrxv332n.jpg",
   },
   created_at: {
     type: Date,
