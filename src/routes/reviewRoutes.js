@@ -13,6 +13,7 @@ const {
   updateReview,
   deleteReview
 } = require("../controllers/reviewController");
+const canDeleteReview = require("../utils/review/canDeleteReview");
 
 // create review for a post (req must include user._id & post._id)
 router.post("/", verifyToken, reviewValidation, canCreateReview, createReview);
@@ -24,6 +25,6 @@ router.get("/", verifyToken, getReviews);
 router.put("/:id", canUpdateReview, reviewValidation, updateReview);
 
 // delete a review from a post (must provide review id in params)
-router.delete("/:id", verifyToken, reviewValidation, deleteReview);
+router.delete("/:id", verifyToken, canDeleteReview, deleteReview);
 
 module.exports = router;

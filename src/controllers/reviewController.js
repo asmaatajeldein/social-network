@@ -55,7 +55,7 @@ const updateReview = async (req, res, next) => {
   if (!updatedReview)
     return next(new AppError("Error in updating review", 404));
 
-  res.send(updatedReview);
+  res.send({ message: "Review updated successfully!", updatedReview });
 };
 
 const deleteReview = async (req, res, next) => {
@@ -65,7 +65,7 @@ const deleteReview = async (req, res, next) => {
   if (!deletedReview)
     return next(new AppError("Error in deleting review", 404));
 
-  res.send(deletedReview);
+  res.send({ message: "Review deleted successfully!", deletedReview });
 };
 
 module.exports = { getReviews, createReview, updateReview, deleteReview };
