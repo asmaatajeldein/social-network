@@ -6,6 +6,7 @@ const reviewValidation = require("../utils/validations/reviewValidation");
 const verifyToken = require("../middlewares/verifyToken");
 const canUpdateReview = require("../middlewares/review/canUpdateReview");
 const canCreateReview = require("../middlewares/review/canCreateReview");
+const canDeleteReview = require("../middlewares/review/canDeleteReview");
 
 const {
   createReview,
@@ -13,7 +14,6 @@ const {
   updateReview,
   deleteReview
 } = require("../controllers/reviewController");
-const canDeleteReview = require("../utils/review/canDeleteReview");
 
 // create review for a post (req must include user._id & post._id)
 router.post("/", verifyToken, reviewValidation, canCreateReview, createReview);
