@@ -1,19 +1,24 @@
-const User = require("../models/User");
-const Post = require("../models/Post");
-const AppError = require("../utils/AppError");
-
 const jwt = require("jsonwebtoken");
 
-const cloudinary = require("../utils/uploadPhotos/cloudinary");
+const User = require("../models/User");
+const Post = require("../models/Post");
+
+const AppError = require("../utils/AppError");
+const imageKit = require("../utils/imageKit");
 
 const updateProfilePic = async (req, res, next) => {
   if (req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "social-network",
+    const image = req.file;
+
+    let imageResponse = await imageKit.upload({
+      file: image.buffer.toString("base64"),
+      fileName: image.originalname,
+      folder: "profile_pictures"
     });
+
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
-      { profile_pic: result.secure_url },
+      { profile_pic: imageResponse },
       { new: true }
     );
     if (!updatedUser) return next(new AppError("Something went wrong!", 401));
@@ -46,7 +51,7 @@ const register = async (req, res, next) => {
   const createdUser = await User.create({
     user_name: username,
     email,
-    password,
+    password
   });
   res.send({ message: "user created successfully!", user: createdUser });
 };
@@ -100,5 +105,5 @@ module.exports = {
   updateUser,
   deleteUser,
   login,
-  updateProfilePic,
+  updateProfilePic
 };
