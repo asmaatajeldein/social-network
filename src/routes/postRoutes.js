@@ -1,17 +1,19 @@
 const express = require("express");
 const router = express.Router();
 
-const multer = require("multer");
-const path = require("path");
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/data/posts_images/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
-  }
-});
-const upload = multer({ storage: "public/data/posts_images/" });
+// const multer = require("multer");
+// const path = require("path");
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "public/data/posts_images/");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+//   }
+// });
+// const upload = multer({ storage: "public/data/posts_images/" });
+
+const upload = require("../utils/multer");
 
 const {
   getUserPosts,

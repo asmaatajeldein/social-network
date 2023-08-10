@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const upload = require("../utils/uploadPhotos/multer");
+const upload = require("../utils/multer");
 
 const verifyToken = require("../middlewares/verifyToken"); // logged in users, admins, or super admins
 const verifyAdminRole = require("../middlewares/verifyAdminRole"); // admins & super admins
@@ -27,8 +27,8 @@ const {
 // upload profile pic
 router.patch(
   "/upload-profile-pic",
-  upload.single("profile_pic"),
   verifyToken,
+  upload.single("profile_pic"),
   updateProfilePic
 );
 
