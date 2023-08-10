@@ -1,8 +1,9 @@
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const Review = require("../models/Review");
+
 const AppError = require("../utils/AppError");
-const uploadToCloud = require("../utils/uploadToCloud");
+const imageKit = require("../utils/imageKit");
 
 const getUserPosts = async (req, res, next) => {
   // get all posts from database
@@ -37,21 +38,27 @@ const getPostById = async (req, res, next) => {
 
 const createPost = async (req, res, next) => {
   // console.log(req);
+  let imageResponse = null;
   if (req.file) {
-    req.body.img_url = await uploadToCloud(req.file.path, {
-      public_id: req.file.originalname
+    const image = req.file;
+    imageResponse = await imageKit.upload({
+      file: image.buffer.toString("base64"),
+      fileName: image.originalname,
+      folder: "posts"
     });
   }
+
   const new_post = new Post({
     author: req.user._id,
     title: req.body.title,
     content: req.body.content,
-    img_url: req.body.img_url?.secure_url,
+    img: imageResponse,
     date: new Date(),
     status: req.body.status
   });
+
   await new_post.save();
-  // console.log("data", req.body);
+
   res.send(new_post);
 };
 
