@@ -4,7 +4,7 @@
     The only one who can update the user role is the super admin.
 */
 
-const AppError = require("./AppError");
+const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");
 
 const canUpdateRole = (req, res, next) => {

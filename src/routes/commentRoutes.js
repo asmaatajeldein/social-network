@@ -3,9 +3,9 @@ const router = express.Router();
 
 const commentValidation = require("../utils/validations/commentValidation");
 
-const verifyToken = require("../utils/verifyToken");
-const canUpdateComment = require("../utils/comment/canUpdateComment");
-const canDeleteComment = require("../utils/comment/canDeleteComment");
+const verifyToken = require("../middlewares/verifyToken");
+const canUpdateComment = require("../middlewares/comment/canUpdateComment");
+const canDeleteComment = require("../middlewares/comment/canDeleteComment");
 
 const {
   createComment,

@@ -3,9 +3,9 @@ const router = express.Router();
 
 const reviewValidation = require("../utils/validations/reviewValidation");
 
-const verifyToken = require("../utils/verifyToken");
-const canUpdateReview = require("../utils/review/canUpdateReview");
-const canCreateReview = require("../utils/review/canCreateReview");
+const verifyToken = require("../middlewares/verifyToken");
+const canUpdateReview = require("../middlewares/review/canUpdateReview");
+const canCreateReview = require("../middlewares/review/canCreateReview");
 
 const {
   createReview,

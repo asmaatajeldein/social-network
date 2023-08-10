@@ -3,7 +3,7 @@
     is updated by its owner, unless the user trying to update the profile,
     is a super admin, and he is just updating the role; nothing more!
 */
-const AppError = require("./AppError");
+const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");
 
 const canUpdateProfile = (req, res, next) => {

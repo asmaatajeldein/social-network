@@ -2,7 +2,7 @@
     This middleware ensures that the comment being updated,
     is updated by its owner.
 */
-const AppError = require("../AppError");
+const AppError = require("../../utils/AppError");
 const jwt = require("jsonwebtoken");
 
 const Comment = require("../../models/Comment");

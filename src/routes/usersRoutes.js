@@ -3,10 +3,10 @@ const router = express.Router();
 
 const upload = require("../utils/uploadPhotos/multer");
 
-const verifyToken = require("../utils/verifyToken"); // logged in users, admins, or super admins
-const verifyAdminRole = require("../utils/verifyAdminRole"); // admins & super admins
-const canUpdateRole = require("../utils/verifySuper"); // only super admins
-const canUpdateProfile = require("../utils/canUpdateProfile"); // only you or a super-admin can update your profile info
+const verifyToken = require("../middlewares/verifyToken"); // logged in users, admins, or super admins
+const verifyAdminRole = require("../middlewares/verifyAdminRole"); // admins & super admins
+const canUpdateRole = require("../middlewares/verifySuper"); // only super admins
+const canUpdateProfile = require("../middlewares/canUpdateProfile"); // only you or a super-admin can update your profile info
 
 // validation middlewares
 const {

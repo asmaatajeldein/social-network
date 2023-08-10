@@ -2,7 +2,7 @@
     This middleware ensures that the review being created,
     does not exist before.
 */
-const AppError = require("../AppError");
+const AppError = require("../../utils/AppError");
 const jwt = require("jsonwebtoken");
 
 const Review = require("../../models/Review");

@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const AppError = require("./AppError");
+const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");
 
 const verifyToken = async (req, res, next) => {
